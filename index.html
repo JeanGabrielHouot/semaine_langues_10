@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10ème Semaine des Langues - Lycée</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-globe"></i>
+                <span>Semaine des Langues</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#planning">Planning</a></li>
+                <li><a href="#inauguration">Inauguration</a></li>
+                <li><a href="#evenements">Événements</a></li>
+                <li><a href="#expositions">Expositions</a></li>
+                <li><a href="#jeux-italien">Jeux</a></li>
+                <li><a href="#affiches">Affiches</a></li>
+            </ul>
+            <button class="nav-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <!-- Slideshow Background -->
+        <div class="hero-slideshow">
+            <div class="hero-slide active">
+                <img src="images/banner.jpg" alt="Semaine des Langues">
+            </div>
+            <div class="hero-slide">
+                <img src="images/defile.jpg" alt="Défilé de Tenues">
+            </div>
+            <div class="hero-slide">
+                <img src="images/karaoke.jpg" alt="Karaoké International">
+            </div>
+            <div class="hero-slide">
+                <img src="images/futsal.jpg" alt="Tournoi de Futsal">
+            </div>
+        </div>
+        
+        <!-- Canvas for Particles Animation -->
+        <canvas id="particles-canvas"></canvas>
+        
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title-animated">10ème Semaine des Langues</h1>
+            <p class="hero-subtitle-animated">Les langues pour comprendre le monde</p>
+            <p class="hero-date hero-date-animated">Du 07 au 10 Avril 2026</p>
+            <a href="#planning" class="btn-primary btn-animated">Découvrir le programme</a>
+        </div>
+        
+        <!-- Slideshow Navigation Dots -->
+        <div class="slideshow-dots">
+            <span class="dot active" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </section>
+
+    <!-- Audio Player Section -->
+    <section class="audio-player-section">
+        <div class="container">
+            <div class="audio-player">
+                <div class="audio-player-cover">
+                    <img src="images/hymne_cover.jpg" alt="Hymne de la Semaine des Langues">
+                    <div class="audio-player-pulse"></div>
+                </div>
+                <div class="audio-player-content">
+                    <div class="audio-player-info">
+                        <h3 class="audio-player-title">🎵 Hymne de la Semaine des Langues</h3>
+                        <p class="audio-player-subtitle">Musique officielle de la 10ème édition</p>
+                    </div>
+                    <div class="audio-player-controls">
+                        <button id="playPauseBtn" class="audio-btn audio-btn-play" onclick="togglePlayPause()" title="Lecture/Pause">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button id="loopBtn" class="audio-btn" onclick="toggleLoop()" title="Lecture en boucle">
+                            <i class="fas fa-repeat"></i>
+                        </button>
+                        <div class="audio-volume-control">
+                            <button class="audio-btn" onclick="toggleMute()" title="Sourdine">
+                                <i id="volumeIcon" class="fas fa-volume-up"></i>
+                            </button>
+                            <input type="range" id="volumeSlider" min="0" max="100" value="70" oninput="changeVolume(this.value)" title="Volume">
+                            <span id="volumeValue">70%</span>
+                        </div>
+                    </div>
+                    <div class="audio-player-progress">
+                        <span id="currentTime">0:00</span>
+                        <div class="audio-progress-bar" onclick="seekAudio(event)">
+                            <div id="progressFill" class="audio-progress-fill"></div>
+                        </div>
+                        <span id="duration">0:00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden audio element -->
+        <audio id="hymneAudio" src="audio/hymne_semaine_langues.mp3" preload="metadata"></audio>
+    </section>
+
+    <!-- Planning Section -->
+    <section id="planning" class="section bg-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-alt"></i> Planning des Activités</h2>
+                <p>Découvrez toutes les activités prévues pendant cette semaine exceptionnelle</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar-day"></i> Date :</label>
+                    <select id="filter-date" onchange="filterActivities()">
+                        <option value="">Toutes les dates</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-language"></i> Langue :</label>
+                    <select id="filter-langue" onchange="filterActivities()">
+                        <option value="">Toutes les langues</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-tag"></i> Type :</label>
+                    <select id="filter-type" onchange="filterActivities()">
+                        <option value="">Tous les types</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><i class="fas fa-eye"></i> Accès :</label>
+                    <select id="filter-public" onchange="filterActivities()">
+                        <option value="">Tous</option>
+                        <option value="true">Ouvert à tous</option>
+                        <option value="false">Classes spécifiques</option>
+                    </select>
+                </div>
+                <button onclick="resetFilters()" class="btn-reset">
+                    <i class="fas fa-redo"></i> Réinitialiser
+                </button>
+            </div>
+
+            <!-- Activities Grid -->
+            <div id="activities-container" class="activities-grid">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Chargement des activités...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expositions et Affiches Section -->
+    <section id="expositions-planning" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-images"></i> Expositions & Affiches</h2>
+                <p>Découvrez les expositions et travaux d'élèves visibles pendant toute la semaine</p>
+            </div>
+
+            <!-- Expositions Grid -->
+            <div id="expositions-container" class="activities-grid">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Chargement des expositions...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inauguration Section -->
+    <section id="inauguration" class="section bg-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-ribbon"></i> Cérémonie d'Inauguration</h2>
+            </div>
+            
+            <div class="event-detail">
+                <img src="images/ceremonie_ouverture.jpg" alt="Cérémonie d'Inauguration">
+                <div class="event-info">
+                    <h3>Cérémonie d'Ouverture</h3>
+                    <div class="info-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>Lundi 07 Avril 2026</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>10h00 - 11h00</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>La Bulle</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-language"></i>
+                        <span>Allemand, Anglais, Espagnol, Italien</span>
+                    </div>
+                    <p>
+                        <strong>Coupe du ruban inaugural</strong> pour marquer l'ouverture officielle de la Semaine des Langues 2026, 10ème édition ! 🎉
+                    </p>
+                    <p>
+                        Discours prononcés par les membres de la communauté éducative, puis discours en langues étrangères de la part d'élèves autour de l'importance des langues dans notre monde interconnecté.
+                    </p>
+                    <p>
+                        <em>Classes participantes : 2_09, 2_10, 2_11, 2_12, 2_15, 2_16, TG, TAMC, 1TSCGPME</em>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Événements Section -->
+    <section id="evenements" class="section bg-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-star"></i> Événements Spéciaux</h2>
+                <p>Les temps forts de la semaine à ne pas manquer !</p>
+            </div>
+            
+            <div class="events-grid">
+                <!-- Défilé -->
+                <div class="event-card">
+                    <img src="images/defile.jpg" alt="Grand Fashion Show des Langues">
+                    <div class="event-content">
+                        <h3>Grand Fashion Show des Langues</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Mercredi 09 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>10h00 - 11h00</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>À l'extérieur, le long de la coursive</span></span>
+                        </div>
+                        <p>
+                            <strong>Défilé de mode en tenues festives traditionnelles.</strong> Organisé chaque année, le défilé est devenu un rendez-vous incontournable durant lequel élèves et personnels arborent des tenues traditionnelles colorées et montent ensemble sur le tapis rouge ! 🎭✨
+                        </p>
+                        <p><span class="activity-badge badge-public"><i class="fas fa-globe"></i> Ouvert à tous</span></p>
+                    </div>
+                </div>
+
+                <!-- Karaoké -->
+                <div class="event-card">
+                    <img src="images/karaoke.jpg" alt="International Karaoke">
+                    <div class="event-content">
+                        <h3>International Karaoke</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Mercredi 09 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>13h35 - 17h00</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>Salle des devoirs du bâtiment D</span></span>
+                        </div>
+                        <p>
+                            <strong>Singing songs in all languages except French! 🎤🌍</strong> Chantez vos chansons préférées dans toutes les langues du monde (sauf le français). Inscription libre avec priorité aux élèves de Terminale.
+                        </p>
+                        <p><em>Organisé par : Mme Vogt & Mme Boudin</em></p>
+                    </div>
+                </div>
+
+                <!-- Futsal -->
+                <div class="event-card">
+                    <img src="images/futsal.jpg" alt="Tournoi des Langues">
+                    <div class="event-content">
+                        <h3>Tournoi des Langues</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Lundi 07 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>13h30 - 16h50 (Début à 14h00)</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>Grand Gymnase</span></span>
+                        </div>
+                        <p>
+                            <strong>Tournoi de futsal international ⚽🌍</strong> Les équipes internationales s'affrontent : Autriche/Allemagne 🇦🇹🇩🇪, Espagne/Argentine 🇪🇸🇦🇷, UK/USA 🇬🇧🇺🇸
+                        </p>
+                        <p>
+                            <strong>🎯 Finale épique :</strong> Les perdants en finale affronteront l'équipe des Professeurs !
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fanfare Brésilienne -->
+                <div class="event-card">
+                    <img src="images/fanfare_bresilienne.jpg" alt="Fanfare Brésilienne">
+                    <div class="event-content">
+                        <h3>Fanfare Brésilienne 🎺🇧🇷</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Lundi 07 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>13h30 - 14h10</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>Bâtiment A et Cour</span></span>
+                        </div>
+                        <p>
+                            <strong>Spectacle déambulatoire rythmé et haut en couleur !</strong> Une fanfare brésilienne investira le lycée. 
+                            Les classes 1AMC et 2_08 défileront ; tout l'établissement pourra suivre le cortège des yeux au moment du passage dans les couloirs et dans la cour. 🎶✨
+                        </p>
+                        <p><span class="activity-badge badge-public"><i class="fas fa-globe"></i> Ouvert à tous</span></p>
+                    </div>
+                </div>
+
+                <!-- Speed Language Dating -->
+                <div class="event-card">
+                    <img src="images/speed_language_dating.jpg" alt="Speed Language Dating">
+                    <div class="event-content">
+                        <h3>Speed Language Dating 🗣️🌏</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Mercredi 09 & Jeudi 10 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>12h45 - 13h30</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>Salle A109</span></span>
+                        </div>
+                        <p>
+                            <strong>Ateliers d'initiation aux langues du monde :</strong><br>
+                            • Mercredi : Russe, Roumain, Penjabi, Wolof<br>
+                            • Jeudi : Créole haïtien, Créole guadeloupéen, Lingala
+                        </p>
+                        <p>
+                            Venez apprendre les bases de ces belles langues avec nos élèves experts ! 🌟
+                        </p>
+                        <p><span class="activity-badge badge-public"><i class="fas fa-globe"></i> Ouvert à tous</span></p>
+                    </div>
+                </div>
+
+                <!-- World Tour -->
+                <div class="event-card">
+                    <img src="images/world_tour.jpg" alt="World Tour in One Room">
+                    <div class="event-content">
+                        <h3>World Tour in One Room 🌍✈️</h3>
+                        <div class="event-meta">
+                            <span><i class="fas fa-calendar"></i> <span>Mercredi 09 Avril</span></span>
+                            <span><i class="fas fa-clock"></i> <span>08h00 - 10h00</span></span>
+                            <span><i class="fas fa-map-marker-alt"></i> <span>CDI</span></span>
+                        </div>
+                        <p>
+                            <strong>One room, dozens of cultures: show and tell your heritage!</strong><br>
+                            Munissez-vous de votre passeport pour un tour du monde au cœur du lycée : parcourez les stands, découvrez des trésors venus d'ailleurs et partagez les récits qui font la fierté de nos élèves !
+                        </p>
+                        <p><em>Classes : 1LLCE, 1AMC</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expositions Section -->
+    <section id="expositions" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-images"></i> Expositions</h2>
+                <p>Explorez les cultures du monde à travers nos expositions thématiques</p>
+            </div>
+            
+            <div class="expo-grid">
+                <div class="expo-card">
+                    <div class="expo-icon"><i class="fas fa-quote-right"></i></div>
+                    <h3>Proverbes en Espagnol</h3>
+                    <p>
+                        Affiches illustrant des proverbes en espagnol réalisées par les élèves de 2_08 et 2_15. 
+                        Découvrez les proverbes appris à chaque cours tout au long de l'année, présentés et illustrés de manière créative.
+                    </p>
+                    <p><strong>📍 Lieu :</strong> Couloir Bâtiment A</p>
+                    <p><strong>📅 Du 07 au 10 avril 2026</strong></p>
+                    <div class="expo-lang"><i class="fas fa-language"></i> Espagnol</div>
+                </div>
+                
+                <div class="expo-card">
+                    <div class="expo-icon"><i class="fas fa-venus"></i></div>
+                    <h3>Femmes Italiennes d'Exception</h3>
+                    <p>
+                        Exposition sur les femmes italiennes d'exception dans l'histoire. Recherches et affiches réalisées par les élèves italianistes de 2de 5 et 1ère. 
+                        Travail interdisciplinaire avec le français, l'histoire, l'EMC et l'histoire de l'art.
+                    </p>
+                    <p><strong>📍 Lieu :</strong> CDI</p>
+                    <p><strong>📅 À partir du 08 avril 2026</strong></p>
+                    <div class="expo-lang"><i class="fas fa-language"></i> Italien</div>
+                </div>
+                
+                <div class="expo-card">
+                    <div class="expo-icon"><i class="fas fa-film"></i></div>
+                    <h3>Exposition : Dolce Vita</h3>
+                    <p>
+                        Les figures historiques, artistiques et sportives italiennes et internationales de l'époque "Dolce Vita". 
+                        Affiches réalisées par 14 élèves italianistes de 1ère et Tle. Travail interdisciplinaire avec l'histoire (années 60, Guerre Froide) et l'anglais.
+                    </p>
+                    <p><strong>📍 Lieu :</strong> CDI</p>
+                    <p><strong>📅 À partir du 08 avril 2026</strong></p>
+                    <div class="expo-lang"><i class="fas fa-language"></i> Italien</div>
+                </div>
+                
+                <div class="expo-card">
+                    <div class="expo-icon"><i class="fas fa-flag"></i></div>
+                    <h3>My Background</h3>
+                    <p>
+                        Posters créés par les élèves des classes 2_11 et 2_12 pour présenter leurs différents pays d'origine, 
+                        les traditions, les tenues traditionnelles et les éléments culturels qui font leur identité.
+                    </p>
+                    <p><strong>📍 Lieu :</strong> CDI</p>
+                    <p><strong>📅 Du 07 au 10 avril 2026</strong></p>
+                    <div class="expo-lang"><i class="fas fa-language"></i> Anglais</div>
+                </div>
+                
+                <div class="expo-card">
+                    <div class="expo-icon"><i class="fas fa-heart"></i></div>
+                    <h3>Les Mots Positifs</h3>
+                    <p>
+                        <strong>Frise collaborative interclasses et interlangues.</strong> Des affiches avec des mots positifs ("amicizia", "empatia", "gentilezza"...) 
+                        que les élèves traduiront dans toutes les langues : français, anglais, espagnol, allemand, portugais, roumain, arabe, kabyle, chinois, urdu, etc.
+                    </p>
+                    <p><strong>📍 Lieu :</strong> Bâtiment A & CDI</p>
+                    <p><strong>📅 08 et 10 avril 2026</strong></p>
+                    <div class="expo-lang"><i class="fas fa-language"></i> Italien & International</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jeux en Italien Section -->
+    <section id="jeux-italien" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-gamepad"></i> Jeux en Italien</h2>
+                <p>Apprenez l'italien en vous amusant avec ces quiz et jeux interactifs !</p>
+                <p class="game-teacher"><i class="fas fa-user-tie"></i> Professoressa ASARO</p>
+            </div>
+            
+            <!-- Catégories de jeux -->
+            <div class="game-categories">
+                <button class="category-btn active" onclick="filterGames('all')">
+                    <i class="fas fa-th"></i> Tous les jeux
+                </button>
+                <button class="category-btn" onclick="filterGames('quiz')">
+                    <i class="fas fa-question-circle"></i> Quiz
+                </button>
+                <button class="category-btn" onclick="filterGames('vocabulaire')">
+                    <i class="fas fa-book"></i> Vocabulaire
+                </button>
+                <button class="category-btn" onclick="filterGames('jeux')">
+                    <i class="fas fa-dice"></i> Jeux
+                </button>
+            </div>
+            
+            <!-- Liste compacte des jeux -->
+            <div class="games-compact-list">
+                <!-- Quiz -->
+                <div class="game-item compact" data-category="quiz">
+                    <div class="game-item-icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="game-item-content">
+                        <h4>Quiz Italiano</h4>
+                        <p>Quiz visuel avec images - Tous niveaux</p>
+                    </div>
+                    <a href="https://wordwall.net/it/resource/1090805/quiz-italiano" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-volume-up"></i></div>
+                    <div class="game-item-content">
+                        <h4>Come si pronuncia?</h4>
+                        <p>Vocabulaire illustré avec prononciation audio</p>
+                    </div>
+                    <a href="https://wordwall.net/it/resource/51908298/italiano/come-si-pronuncia" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="game-item-content">
+                        <h4>Leggere parole</h4>
+                        <p>Lecture et association d'images</p>
+                    </div>
+                    <a href="https://wordwall.net/it/resource/12903828/italiano/leggere-parole" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="jeux">
+                    <div class="game-item-icon"><i class="fas fa-circle-notch"></i></div>
+                    <div class="game-item-content">
+                        <h4>I saluti in italiano</h4>
+                        <p>Roue des salutations - Apprendre à saluer</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="jeux">
+                    <div class="game-item-icon"><i class="fas fa-random"></i></div>
+                    <div class="game-item-content">
+                        <h4>Riordinare frasi</h4>
+                        <p>Remettre les phrases dans l'ordre</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="quiz">
+                    <div class="game-item-icon"><i class="fas fa-spell-check"></i></div>
+                    <div class="game-item-content">
+                        <h4>Quiz verbi</h4>
+                        <p>Quiz sur les verbes italiens</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="game-item-content">
+                        <h4>Il cibo italiano</h4>
+                        <p>Vocabulaire de la nourriture italienne</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="jeux">
+                    <div class="game-item-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <div class="game-item-content">
+                        <h4>Memory italiano</h4>
+                        <p>Jeu de mémoire avec images et mots</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="quiz">
+                    <div class="game-item-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <div class="game-item-content">
+                        <h4>Geografia italiana</h4>
+                        <p>Quiz sur la géographie de l'Italie</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-palette"></i></div>
+                    <div class="game-item-content">
+                        <h4>I colori</h4>
+                        <p>Apprendre les couleurs en italien</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="jeux">
+                    <div class="game-item-icon"><i class="fas fa-crosshairs"></i></div>
+                    <div class="game-item-content">
+                        <h4>Trova la parola</h4>
+                        <p>Cherchez le mot caché - Jeu d'observation</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="quiz">
+                    <div class="game-item-icon"><i class="fas fa-clock"></i></div>
+                    <div class="game-item-content">
+                        <h4>Che ora è?</h4>
+                        <p>Apprendre à dire l'heure en italien</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-tshirt"></i></div>
+                    <div class="game-item-content">
+                        <h4>I vestiti</h4>
+                        <p>Vocabulaire des vêtements</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="jeux">
+                    <div class="game-item-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="game-item-content">
+                        <h4>Campionato italiano</h4>
+                        <p>Défi chronométré - Répondez vite !</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+
+                <div class="game-item compact" data-category="vocabulaire">
+                    <div class="game-item-icon"><i class="fas fa-home"></i></div>
+                    <div class="game-item-content">
+                        <h4>La casa</h4>
+                        <p>Vocabulaire de la maison et des pièces</p>
+                    </div>
+                    <a href="#" target="_blank" class="game-item-btn">
+                        <i class="fas fa-play"></i> Jouer
+                    </a>
+                </div>
+            </div>
+            
+            <div class="game-info-box">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Info :</strong> 15 jeux disponibles ! Utilisez les filtres pour trouver le jeu qui vous convient. Tous les jeux s'ouvrent dans un nouvel onglet.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Affiches Section -->
+    <section id="affiches" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-image"></i> Affiches de la Semaine des Langues 2026</h2>
+                <p>Découvrez les magnifiques affiches créées par nos élèves pour cette 10ème édition</p>
+            </div>
+            
+            <div class="affiches-gallery">
+                <!-- Affiche 1 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_mike.jpg" alt="Affiche Semaine des Langues - Design coloré" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Affiche Principale</h3>
+                        <p>Design festif et coloré célébrant la diversité linguistique</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 2 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_gateau_multilingue.jpg" alt="Gâteau Multilingue" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Gâteau Multilingue</h3>
+                        <p>"Bienvenue" dans plusieurs langues - Célébration internationale</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 3 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_gateau_drapeaux.jpg" alt="Gâteau avec Drapeaux" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Gâteau des Nations</h3>
+                        <p>Drapeaux du monde entier pour célébrer la diversité</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 4 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_gateau_colorful.jpg" alt="Gâteau Arc-en-ciel" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Gâteau Arc-en-ciel</h3>
+                        <p>Célébration colorée du 10ème anniversaire</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 5 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_allemand_1.jpg" alt="Affiche Allemande 1" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Affiche Allemande</h3>
+                        <p>Design promotionnel pour la Semaine des Langues</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 6 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_allemand_2.jpg" alt="Affiche Allemande 2" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Affiche Allemande</h3>
+                        <p>Promotion de l'événement avec design moderne</p>
+                    </div>
+                </div>
+
+                <!-- Affiche 7 -->
+                <div class="affiche-card">
+                    <img src="images/affiches/poster_allemand_3.jpg" alt="Affiche Allemande 3" onclick="openAfficheModal(this)">
+                    <div class="affiche-info">
+                        <h3>Les Langues pour Comprendre le Monde</h3>
+                        <p>"Sprachen um die Welt zu verstehen" - Slogan officiel en allemand</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-note">
+                <i class="fas fa-star"></i>
+                <p><strong>Merci</strong> à tous les élèves qui ont participé à la création de ces magnifiques affiches ! Cliquez sur une affiche pour l'agrandir.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal pour afficher l'affiche en grand -->
+    <div id="afficheModal" class="affiche-modal" onclick="closeAfficheModal()">
+        <span class="affiche-modal-close">&times;</span>
+        <img class="affiche-modal-content" id="afficheModalImg">
+        <div id="afficheModalCaption"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>10ème Semaine des Langues</h3>
+                    <p>
+                        Les langues pour comprendre le monde.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Lycée Voillaume</h4>
+                    <p>
+                        <a href="https://lyceevoillaume.fr" target="_blank" class="footer-link">
+                            <i class="fas fa-external-link-alt"></i> lyceevoillaume.fr
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lycée Voillaume - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
